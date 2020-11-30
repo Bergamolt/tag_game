@@ -3,6 +3,26 @@ body {
     margin: 0;
 }
 
+:root {
+    --height: 350px;
+}
+
+.btn {
+    background-color: rgba(5, 186, 5, 0.9);
+    width: 50%;
+    height: 50px;
+    border-radius: 8px;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn:disabled {
+    background-color: #343434;
+}
+
 .container {
     display: flex;
     flex-direction: column;
@@ -17,18 +37,30 @@ body {
 }
 
 .start-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
     position: absolute;
     z-index: 2;
     width: 400px;
-    height: 400px;
+    height: var(--height);
     background-color: #ffffff;
+    border-radius: 8px;
 }
 
 .btns {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 30px;
+    align-items: center;
+}
+
+.btns button {
+    width: 50%;
+    height: 50px;
+    margin: 0 2px;
+    border-radius: 8px;
+    border: none;
 }
 
 .popup {
@@ -46,12 +78,28 @@ body {
 
 .popup-pause {
     display: none;
-    max-width: 300px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    max-width: 400px;
     width: 100%;
-    height: 300px;
+    height: var(--height);
     background-color: #ffffff;
     border-radius: 8px;
 }
+
+.popup-menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    max-width: 400px;
+    width: 100%;
+    height: var(--height);
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
 
 .counter {
     display: flex;
@@ -59,7 +107,6 @@ body {
     height: 70px;
     background-color: #ffffffd1;
     border-radius: 8px;
-    margin-bottom: 30px;
 }
 
 .counter-time {
@@ -88,6 +135,9 @@ body {
 
 .screen-game {
     display: none;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
 .field {
@@ -98,9 +148,9 @@ body {
 
 .tile {
     position: absolute;
-    height: 100px;
-    width: 100px;
-    transition: all .5s;
+    width: 25%;
+    height: 25%;
+    transition: all .3s;
     padding: 2px;
     cursor: pointer;
     box-sizing: border-box;
@@ -116,5 +166,20 @@ body {
     color: #ffffff;
     font-size: 50px;
     font-weight: 800;
+}
+
+/* Media */
+@media screen and (max-width: 375px) {
+    .field {
+        width: 340px;
+        height: 340px;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    .field {
+        width: 300px;
+        height: 300px;
+    }
 }
 

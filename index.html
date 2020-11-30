@@ -8,17 +8,23 @@
 </head>
 <body>
     <div class="container">
-        <div class="btns">
-            <button id="pause">Pause</button>
-            <button>Menu</button>
-        </div>
         <div class="start-game">
-            <button id="startGame">Начать игру</button>
+            <span>Tag Game</span>
+            <button class="btn" id="startGame">Начать игру</button>
+            <button disabled class="btn" id="loadSaveBtn">Продолжить игру</button>
+            <button disabled class="btn" id="">Таблица рекордов</button>
         </div>
         <div class="popup">
             <div class="popup-pause">
                 <span>Пауза</span>
-                <button id="continue">Продолжить</button>
+                <button class="btn" id="continue">Продолжить</button>
+            </div>
+            <div class="popup-menu">
+                <span>Меню</span>
+                <button class="btn" id="newGame">Новая игра</button>
+                <button class="btn" id="continueGame">Продолжить игру</button>
+                <button disabled class="btn" id="">Таблица рекордов</button>
+                <button class="btn" id="sound">Выключить звук</button>
             </div>
         </div>
         <div class="screen-game">
@@ -33,10 +39,14 @@
                 </div>
             </div>
             <div class="field"></div>
+            <div class="btns">
+                <button class="btn" id="pause">Пауза</button>
+                <button class="btn" id="menu">Меню</button>
+            </div>
         </div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/randomcolor/0.6.1/randomColor.min.js"></script>
+    <script src="./js/lib/randomcolor.js"></script>
     <script src="./js/app.js"></script>
 </body>
 </html>
