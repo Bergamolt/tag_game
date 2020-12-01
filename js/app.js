@@ -10,7 +10,7 @@ const beep = new Audio('./audio/beep.wav');
 const bg = new Image();
 bg.src = './img/bg.jpg';
 
-//variables
+
 let tapCounter = 0;
 let pauseCheck = false;
 let checkSound = true;
@@ -26,8 +26,8 @@ const time = () => {
     const timeBlock = document.querySelector('.time');
 
     const timer = setInterval(() => {
-        let minute = timeMinute < 10 ? '0' + timeMinute : timeMinute;
-        let second = timeSecond < 10 ? '0' + ++timeSecond : ++timeSecond;
+        const minute = timeMinute < 10 ? '0' + timeMinute : timeMinute;
+        const second = timeSecond < 9 ? '0' + ++timeSecond : ++timeSecond;
 
         if (timeSecond > 59) {
             ++timeMinute;
@@ -81,6 +81,7 @@ const move = (tile) => {
 const render = (num) => {
 
     const color = randomColor({
+        luminosity: 'dark',
         format: 'rgba',
         alpha: 0.9
     });
@@ -103,7 +104,6 @@ const render = (num) => {
     return tile;
 };
 
-//save game
 const saveGame = (elem) => {
     
     const obj = {
@@ -111,17 +111,17 @@ const saveGame = (elem) => {
         second: timeSecond,
         taps: tapCounter,
         elem: elem,    
-    }
-    console.log(obj)
+    };
+   
     const json = JSON.stringify(obj);
-    console.log(json)
     localStorage.setItem('save', json);
 };
-//
 
 const renderContinueGame = (num) => {
     const obj = JSON.parse(localStorage.getItem('save'));
         const pos = obj.elem;
+        timeMinute = obj.minute;
+        timeSecond = obj.second;
         const color = randomColor({
             format: 'rgba',
             alpha: 0.9
@@ -139,7 +139,7 @@ const renderContinueGame = (num) => {
         tile.left = pos[num].left;
 
         return tile;
-}
+};
 
 const pause = () => {
     const popUp = document.querySelector('.popup');
@@ -164,64 +164,79 @@ const pause = () => {
     });
 };
 
-//start game
-const start = () => {
-    const start = document.querySelector('#startGame');
-};
-//
+const newGame = () => {
+    document.querySelector('.popup').style.height = '0%';
+    document.querySelector('.popup-menu').style.display = 'none';
+    pauseCheck = false;
+    clearInterval(timer);
+    timeMinute = 0;
+    timeSecond = 0;
+    start();
+}
 
-bg.onload = () => {
-    console.log(bg.src)
+const menu = () => {
+    menuBtn.addEventListener('click', () => {
+        if (!pauseCheck) {
+            document.querySelector('.popup').style.height = '100%';
+            document.querySelector('.popup-menu').style.display = 'flex';
+            pauseCheck = true;
+            clearInterval(timer);
+        }
+    });
+
+    document.querySelector('#newGame').addEventListener('click', () => {
+        newGame();
+    });
+    
+    continueGameBtn.addEventListener('click', () => {
+        if (pauseCheck) {
+            document.querySelector('.popup').style.height = '0%';
+            document.querySelector('.popup-menu').style.display = 'none';
+            timer = time();
+            pauseCheck = false;
+        }
+    });
+};
+
+const start = () => {
+    document.querySelector('.start-game').style.display = 'none';
+    document.querySelector('.screen-game').style.display = 'flex';
+
+    for (let i = 1; i <= 15; i++) {
+        const tile = render(i);
+        tile.addEventListener('click', () => {
+            move(tile);
+        });
+    }
+
+    timer = time();
+    pause();
+    menu();
+    sound();
+};
+
+setTimeout(() => {
+    
     document.querySelector('.container').style.backgroundImage = `url(${bg.src})`;
     document.querySelector('.loader').style.display = 'none';
     document.querySelector('.start-game').style.display = 'flex';
     document.querySelector('#startGame').addEventListener('click', () => {
-        document.querySelector('.start-game').style.display = 'none';
-        document.querySelector('.screen-game').style.display = 'flex';
-        //document.querySelector('.screen-game').classList.add('show')
-
-        for (let i = 1; i <= 15; i++) {
-            const tile = render(i);
-            tile.addEventListener('click', () => {
-                move(tile);
-            });
-        }
-
-        timer = time();
-        pause();
-        sound();
-
-        //Menu
-        menuBtn.addEventListener('click', () => {
-            if (!pauseCheck) {
-                document.querySelector('.popup').style.height = '100%';
-                document.querySelector('.popup-menu').style.display = 'flex';
-                pauseCheck = true;
-                clearInterval(timer);
-                saveGame();
-            }
-        });
-        
-        continueGameBtn.addEventListener('click', () => {
-            if (pauseCheck) {
-                document.querySelector('.popup').style.height = '0%';
-                document.querySelector('.popup-menu').style.display = 'none';
-                timer = time();
-                pauseCheck = false;
-            }
-        });
+        start();
     });
-
-    const loadSaveBtn = document.querySelector('#loadSaveBtn');
-        loadSaveBtn.addEventListener('click', () => {
-            document.querySelector('.start-game').style.display = 'none';
-        document.querySelector('.screen-game').style.display = 'flex';
-            for (let i = 0; i < 15; i++) {
-                renderContinueGame(i);
-                // const tile = render(i);
-                // tile.addEventListener('click', () => {
-                //     move(tile);
-                // });
-            }
-        });
-};
+        
+        const loadSaveBtn = document.querySelector('#loadSaveBtn');
+            loadSaveBtn.addEventListener('click', () => {
+                document.querySelector('.start-game').style.display = 'none';
+            document.querySelector('.screen-game').style.display = 'flex';
+                for (let i = 0; i < 15; i++) {
+                    const tile = renderContinueGame(i);;
+                    tile.addEventListener('click', () => {
+                        move(tile);
+                    });
+                }
+                timer = time();
+    pause();
+    menu();
+    sound();
+            });
+}, 3500);
