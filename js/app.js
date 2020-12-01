@@ -1,11 +1,14 @@
 'use strict';
 
+const field = document.querySelector('.field');
 const tapContainer = document.querySelector('.tap');
 const pauseBtn = document.querySelector('#pause');
 const menuBtn = document.querySelector('#menu');
 const continueBtn = document.querySelector('#continue');
 const continueGameBtn = document.querySelector('#continueGame');
 const beep = new Audio('./audio/beep.wav');
+const bg = new Image();
+bg.src = './img/bg.jpg';
 
 //variables
 let tapCounter = 0;
@@ -53,11 +56,11 @@ const move = (tile) => {
     const diffX = Math.abs(savePosX - emptyPos.x);
     const diffY = Math.abs(savePosY - emptyPos.y);
 
+    console.log(diffX, diffY);
+    if (diffY + diffX > 25) return;
 
-    if (diffY + diffX > 100) return;
-
-    tile.style.top = emptyPos.y + 'px';
-    tile.style.left = emptyPos.x + 'px';
+    tile.style.top = emptyPos.y + '%';
+    tile.style.left = emptyPos.x + '%';
     tile.top = emptyPos.y;
     tile.left = emptyPos.x;
     emptyPos.y = savePosY;
@@ -70,15 +73,13 @@ const move = (tile) => {
     const tiles = [...document.querySelectorAll('.tile')];
     saveGame(tiles);
     const isFinishGame = tiles.every(item => {
-        return (item.top * 4 + item.left + 100) / 100 == item.dataset.tileNumber;
+        return ((item.top * 4) * 4 + (item.left * 4 + 100)) / 100 == item.dataset.tileNumber;
     });
 
-    console.log(isFinishGame);
 };
 
 const render = (num) => {
-    const field = document.querySelector('.field');
-    let sizeTile = field.clientWidth / 4;
+
     const color = randomColor({
         format: 'rgba',
         alpha: 0.9
@@ -89,27 +90,31 @@ const render = (num) => {
     tile.innerHTML = `<div class="tile-item" style="background-color:${color};">${numbers[num - 1] + 1}</div>`;
     field.append(tile);
 
-    const posX = num % 4;
-    const posY = (num - posX) / 4;
+    const posX = (num % 4) * 100 * 0.25;
+    const posY = ((num - num % 4) / 4 * 100) * 0.25;
+    
+    tile.style.top = `${posY}%`;
+    tile.style.left = `${posX}%`;
 
-    tile.style.top = `${posY * sizeTile}px`;
-    tile.style.left = `${posX * sizeTile}px`;
-
-    tile.top = posY * sizeTile;
-    tile.left = posX * sizeTile;
+    tile.top = posY;
+    tile.left = posX;
+    tile.number = numbers[num - 1] + 1;
 
     return tile;
 };
 
 //save game
 const saveGame = (elem) => {
+    
     const obj = {
         minute: timeMinute,
         second: timeSecond,
         taps: tapCounter,
         elem: elem,    
     }
+    console.log(obj)
     const json = JSON.stringify(obj);
+    console.log(json)
     localStorage.setItem('save', json);
 };
 //
@@ -123,12 +128,12 @@ const renderContinueGame = (num) => {
         });
         const tile = document.createElement('div');
         tile.classList.add('tile');
-        tile.setAttribute('data-tile-number', num + 1);
-        tile.innerHTML = `<div class="tile-item" style="background-color:${color};">${num + 1}</div>`;
+        tile.setAttribute('data-tile-number', pos[num].number);
+        tile.innerHTML = `<div class="tile-item" style="background-color:${color};">${pos[num].number}</div>`;
         field.append(tile);
 
-        tile.style.top = `${pos[num].top}px`;
-        tile.style.left = `${pos[num].left}px`;
+        tile.style.top = `${pos[num].top}%`;
+        tile.style.left = `${pos[num].left}%`;
 
         tile.top = pos[num].top;
         tile.left = pos[num].left;
@@ -165,10 +170,15 @@ const start = () => {
 };
 //
 
-window.onload = () => {
+bg.onload = () => {
+    console.log(bg.src)
+    document.querySelector('.container').style.backgroundImage = `url(${bg.src})`;
+    document.querySelector('.loader').style.display = 'none';
+    document.querySelector('.start-game').style.display = 'flex';
     document.querySelector('#startGame').addEventListener('click', () => {
         document.querySelector('.start-game').style.display = 'none';
         document.querySelector('.screen-game').style.display = 'flex';
+        //document.querySelector('.screen-game').classList.add('show')
 
         for (let i = 1; i <= 15; i++) {
             const tile = render(i);
