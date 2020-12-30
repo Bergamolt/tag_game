@@ -90,6 +90,7 @@ const move = (tile) => {
     popup.style.height = '100%';
     gameOver.style.display = 'flex';
     clearInterval(timer);
+    localStorage.removeItem('save');
     timeEnd.textContent = `${minute}:${second}`;
     tapEnd.textContent = `${tapCounter}`;
 
@@ -144,6 +145,7 @@ const saveGame = (elem) => {
     second: timeSecond,
     taps: tapCounter,
     elem: elem,
+    emptyPos: emptyPos,
   };
 
   const json = JSON.stringify(obj);
@@ -153,22 +155,31 @@ const saveGame = (elem) => {
 const renderContinueGame = (num) => {
   const obj = JSON.parse(localStorage.getItem('save'));
   const pos = obj.elem;
+
+  emptyPos.x = obj.emptyPos.x;
+  emptyPos.y = obj.emptyPos.y;
   timeMinute = obj.minute;
   timeSecond = obj.second;
+  tapCounter = obj.taps;
+  tapContainer.textContent = tapCounter;
+
   const color = randomColor({
+    luminosity: 'dark',
     format: 'rgba',
     alpha: 0.9,
   });
+
   const tile = document.createElement('div');
   tile.classList.add('tile');
   tile.setAttribute('data-tile-number', pos[num].number);
   tile.innerHTML = `<div class="tile-item" style="background-color:${color};">${pos[num].number}</div>`;
-  tile.style.top = `${pos[num].top}%`;
-  tile.style.left = `${pos[num].left}%`;
   field.append(tile);
 
+  tile.style.top = `${pos[num].top}%`;
+  tile.style.left = `${pos[num].left}%`;
   tile.top = pos[num].top;
   tile.left = pos[num].left;
+  tile.number = pos[num].number;
 
   return tile;
 };
@@ -232,14 +243,14 @@ const record = () => {
   if (record) {
     tap.textContent = record.tap;
     const minute =
-      Math.floor(record.time / 60) < 10
-        ? `0${Math.floor(record.time / 60)}`
-        : Math.floor(record.time / 60);
+      ~~(record.time / 60) < 10
+        ? `0${~~(record.time / 60)}`
+        : ~~(record.time / 60);
 
     const second =
-      record.time - Math.floor(record.time / 60) * 60 < 10
-        ? `0${record.time - Math.floor(record.time / 60) * 60}`
-        : record.time - Math.floor(record.time / 60) * 60;
+      record.time - ~~(record.time / 60) * 60 < 10
+        ? `0${record.time - ~~(record.time / 60) * 60}`
+        : record.time - ~~(record.time / 60) * 60;
     time.textContent = `${minute}:${second}`;
   }
 };
@@ -249,21 +260,27 @@ const start = () => {
   document.querySelector('.screen-game').style.display = 'flex';
 
   for (let i = 1; i <= 15; i++) {
-    const tile = render(i);
-    tile.addEventListener('click', () => {
-      move(tile);
-    });
+    render(i);
   }
 
   const tiles = document.querySelectorAll('.tile');
   setTimeout(() => {
-    for (let i = 0; i < tiles.length - 1; i++) {
+    for (let i = 0; i < tiles.length; i++) {
       const top = tiles[i].top;
       const left = tiles[i].left;
       tiles[i].style.top = tiles[tiles.length - 1 - i].top + '%';
       tiles[i].style.left = tiles[tiles.length - 1 - i].left + '%';
       tiles[tiles.length - 1 - i].style.top = top + '%';
       tiles[tiles.length - 1 - i].style.left = left + '%';
+
+      tiles[i].top = tiles[tiles.length - 1 - i].top;
+      tiles[i].left = tiles[tiles.length - 1 - i].left;
+      tiles[tiles.length - 1 - i].top = top;
+      tiles[tiles.length - 1 - i].left = left;
+
+      tiles[i].addEventListener('click', () => {
+        move(tiles[i]);
+      });
     }
   }, 500);
 

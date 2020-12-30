@@ -1,91 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./src/css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./src/css/style.css" />
     <title>Tag Game</title>
-</head>
-<body>
+  </head>
+  <body>
     <div></div>
     <container class="container">
-        <div class="loader">
-            <div class="l_main">
-              <div class="l_square"><span></span><span></span><span></span></div>
-              <div class="l_square"><span></span><span></span><span></span></div>
-              <div class="l_square"><span></span><span></span><span></span></div>
-              <div class="l_square"><span></span><span></span><span></span></div>
-            </div>
+      <div class="loader">
+        <div class="l_main">
+          <div class="l_square"><span></span><span></span><span></span></div>
+          <div class="l_square"><span></span><span></span><span></span></div>
+          <div class="l_square"><span></span><span></span><span></span></div>
+          <div class="l_square"><span></span><span></span><span></span></div>
         </div>
-        <div class="start-game">
-            <span class="game-title">Tag Game</span>
-            <button class="btn" id="startGame">Начать игру</button>
-            <button disabled class="btn" id="loadSaveBtn">Продолжить игру</button>
-            <button class="btn" id="recordBtn">Таблица рекордов</button>
+      </div>
+      <div class="start-game">
+        <span class="game-title">Tag Game</span>
+        <button class="btn" id="startGame">Начать игру</button>
+        <button class="btn" id="loadSaveBtn">Продолжить игру</button>
+        <button class="btn" id="recordBtn">Таблица рекордов</button>
+      </div>
+      <div class="popup">
+        <div class="popup-pause popup-body">
+          <span class="title">Пауза</span>
+          <button class="btn" id="continue">Продолжить</button>
         </div>
-        <div class="popup">
-            <div class="popup-pause popup-body">
-                <span class="title">Пауза</span>
-                <button class="btn" id="continue">Продолжить</button>
-            </div>
-            <div class="popup-menu popup-body">
-                <span class="title">Меню</span>
-                <button class="btn" id="continueGame">Продолжить</button>
-                <button class="btn" id="newGame">Новая игра</button>
-                <button class="btn" id="recordBtn">Таблица рекордов</button>
-                <button class="btn" id="sound">Выключить звук</button>
-            </div>
-            <div class="gameover popup-body">
-                <span class="title">Конец игры!</span>
-                <div class="counter">
-                    <div class="counter-time">
-                        <span>Время:</span>
-                        <span class="time-end">00:00</span>
-                    </div>
-                    <div class="counter-tap">
-                        <span>Шагов:</span>
-                        <span class="tap-end">0</span>
-                    </div>
-                </div>
-                <button class="btn" id="newGame">Новая игра</button>
-            </div>
-            <div class="record popup-body">
-                <span class="title">Ваш рекорд</span>
-                <div class="counter">
-                    <div class="counter-time">
-                        <span>Время:</span>
-                        <span class="time-record">00:00</span>
-                    </div>
-                    <div class="counter-tap">
-                        <span>Шагов:</span>
-                        <span class="tap-record">0</span>
-                    </div>
-                </div>
-                <button class="btn" id="closeRecord">Закрыть</button>
-            </div>
+        <div class="popup-menu popup-body">
+          <span class="title">Меню</span>
+          <button class="btn" id="continueGame">Продолжить</button>
+          <button class="btn" id="newGame">Новая игра</button>
+          <button class="btn" id="recordBtn">Таблица рекордов</button>
+          <button class="btn" id="sound">Выключить звук</button>
         </div>
-        <div class="screen-game">
-            <div class="counter">
-                <div class="counter-time">
-                    <span>Время:</span>
-                    <span class="time">00:00</span>
-                </div>
-                <div class="counter-tap">
-                    <span>Шагов:</span>
-                    <span class="tap">0</span>
-                </div>
+        <div class="gameover popup-body">
+          <span class="title">Конец игры!</span>
+          <div class="counter">
+            <div class="counter-time">
+              <span>Время:</span>
+              <span class="time-end">00:00</span>
             </div>
-            <div class="field"></div>
-            <div class="btns">
-                <button class="btn" id="pause">Пауза</button>
-                <button class="btn" id="menu">Меню</button>
+            <div class="counter-tap">
+              <span>Шагов:</span>
+              <span class="tap-end">0</span>
             </div>
+          </div>
+          <button class="btn" id="newGame">Новая игра</button>
         </div>
+        <div class="record popup-body">
+          <span class="title">Ваш рекорд</span>
+          <div class="counter">
+            <div class="counter-time">
+              <span>Время:</span>
+              <span class="time-record">00:00</span>
+            </div>
+            <div class="counter-tap">
+              <span>Шагов:</span>
+              <span class="tap-record">0</span>
+            </div>
+          </div>
+          <button class="btn" id="closeRecord">Закрыть</button>
+        </div>
+      </div>
+      <div class="screen-game">
+        <div class="counter">
+          <div class="counter-time">
+            <span>Время:</span>
+            <span class="time">00:00</span>
+          </div>
+          <div class="counter-tap">
+            <span>Шагов:</span>
+            <span class="tap">0</span>
+          </div>
+        </div>
+        <div class="field"></div>
+        <div class="btns">
+          <button class="btn" id="pause">Пауза</button>
+          <button class="btn" id="menu">Меню</button>
+        </div>
+      </div>
     </container>
-    
+
     <script src="./src/js/lib/randomcolor.js"></script>
     <script src="./src/js/app.js"></script>
-</body>
+  </body>
 </html>
